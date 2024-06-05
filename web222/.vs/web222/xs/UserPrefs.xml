@@ -1,0 +1,36 @@
+﻿<Properties StartupConfiguration="{9924FAFF-DB51-4B7B-ABC8-5472AECD5A35}|Default">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.web222 PreferredExecutionTarget="/Applications/Safari.app" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/AccountController.cs">
+    <Files>
+      <File FileName="Controllers/HomeController.cs" />
+      <File FileName="Controllers/AccountController.cs" Line="18" Column="1" />
+      <File FileName="Startup.cs" Line="18" Column="6" />
+      <File FileName="Models/User.cs" Line="5" Column="21" />
+      <File FileName="Models/UserRole.cs" Line="8" Column="34" />
+      <File FileName="Models/Role.cs" Line="7" Column="3" />
+      <File FileName="Context/ApplicationDbContext.cs" Line="11" Column="24" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="web222" expanded="True">
+            <Node name="web222">
+              <Node name="Context" expanded="True" />
+              <Node name="Controllers" expanded="True">
+                <Node name="AccountController.cs" selected="True" />
+              </Node>
+              <Node name="Migrations" expanded="True" />
+              <Node name="Models" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+</Properties>
