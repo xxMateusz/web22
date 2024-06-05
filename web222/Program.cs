@@ -6,79 +6,82 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using web222;
 using web222.Context;
 using web222.Models;
-public static class SeedData
+
+namespace web222
 {
-    public static async Task Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager)
+    public static class SeedData
     {
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-        
-        string[] roleNames = { "Admin", "User", "Guest" };
-        IdentityResult roleResult;
-
-        foreach (var roleName in roleNames)
+        public static async Task Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager)
         {
-            var roleExist = await roleManager.RoleExistsAsync(roleName);
-            if (!roleExist)
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+            string[] roleNames = { "Admin", "User", "Guest" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
             {
-                roleResult = await roleManager.CreateAsync(new ApplicationRole { Name = roleName });
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await roleManager.CreateAsync(new ApplicationRole { Name = roleName });
+                }
             }
-        }
 
-        // Create a default Admin user if it doesn't exist
-        var adminUser = new ApplicationUser
-        {
-            UserName = "admin@admin.com",
-            Email = "admin@admin.com"
-        };
-
-        string adminPassword = "Admin@123";
-
-        var user = await userManager.FindByEmailAsync(adminUser.Email);
-
-        if (user == null)
-        {
-            var createPowerUser = await userManager.CreateAsync(adminUser, adminPassword);
-            if (createPowerUser.Succeeded)
+            // Create a default Admin user if it doesn't exist
+            var adminUser = new ApplicationUser
             {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
+                UserName = "admin@admin.com",
+                Email = "admin@admin.com"
+            };
+
+            string adminPassword = "Admin@123";
+
+            var user = await userManager.FindByEmailAsync(adminUser.Email);
+
+            if (user == null)
+            {
+                var createPowerUser = await userManager.CreateAsync(adminUser, adminPassword);
+                if (createPowerUser.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
             }
         }
     }
-}
 
-public class Program
-{
-    public static async Task Main(string[] args)
+    public class Program
     {
-        var host = CreateHostBuilder(args).Build();
-
-        using (var scope = host.Services.CreateScope())
+        public static async Task Main(string[] args)
         {
-            var services = scope.ServiceProvider;
-            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            var host = CreateHostBuilder(args).Build();
 
-            try
+            using (var scope = host.Services.CreateScope())
             {
-                await SeedData.Initialize(services, userManager);
+                var services = scope.ServiceProvider;
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+                try
+                {
+                    await SeedData.Initialize(services, userManager);
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred seeding the DB.");
+                }
             }
-            catch (Exception ex)
-            {
-                var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogError(ex, "An error occurred seeding the DB.");
-            }
+
+            await host.RunAsync();
         }
 
-        await host.RunAsync();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls( "https://localhost:5003");
+                });
     }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
 }

@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using web222.Models;
 
-namespace web222.Controllers;
 
-
+namespace web222.Controllers
+{
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -49,6 +50,7 @@ namespace web222.Controllers;
         }
 
         [HttpPost]
+        
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -63,11 +65,14 @@ namespace web222.Controllers;
             return View(model);
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
     }
-    
+}
+
+
