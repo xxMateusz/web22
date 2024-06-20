@@ -12,7 +12,9 @@ namespace web222.Context;
             : base(options)
         {
         }
-
+        public DbSet<FormData> FormData { get; set; }
+        public DbSet<Pracodawca> Pracodawcy { get; set; }
+        public DbSet<Zone> Zones { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

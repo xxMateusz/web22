@@ -16,7 +16,7 @@ namespace web222
         public static async Task Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
+            var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
             string[] roleNames = { "Admin", "User", "Guest" };
             IdentityResult roleResult;
 
@@ -47,6 +47,14 @@ namespace web222
                 {
                     await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
+            }
+            if (!context.Zones.Any())
+            {
+                context.Zones.AddRange(
+                    new Zone { Name = "Zone 1", IsSelected = false },
+                    new Zone { Name = "Zone 2", IsSelected = false }
+                );
+                await context.SaveChangesAsync();
             }
         }
     }

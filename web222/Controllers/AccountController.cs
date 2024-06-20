@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using web222.Models;
 
 
@@ -71,6 +72,13 @@ namespace web222.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult UserList()
+        {
+            var users = _userManager.Users.ToList();
+            return View(users);
         }
     }
 }

@@ -29,7 +29,14 @@ namespace web222
                 .AddDefaultTokenProviders();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            // Ensure that role management is available
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            });
         }
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
